@@ -1,22 +1,18 @@
 import { Commitment, Task } from '../types';
-import { mockCommitments, mockTasks } from '../data/mockData';
+import { BASE_URL } from './api';
 
-// TODO: Replace with: return fetch(`${BASE_URL}/things/commitments`)
-
-export function getCommitments(): Promise<Commitment[]> {
-  return Promise.resolve([...mockCommitments]);
+export async function getThings(): Promise<{ commitments: Commitment[]; tasks: Task[] }> {
+  const res = await fetch(`${BASE_URL}/things`);
+  if (!res.ok) throw new Error('Failed to fetch things');
+  return res.json();
 }
 
-export function getTasks(): Promise<Task[]> {
-  // TODO: Replace with: return fetch(`${BASE_URL}/things/tasks`)
-  return Promise.resolve([...mockTasks]);
+export async function getCommitments(): Promise<Commitment[]> {
+  const { commitments } = await getThings();
+  return commitments;
 }
 
-export function toggleTask(id: string): Promise<Task> {
-  // TODO: Replace with: return fetch(`${BASE_URL}/things/tasks/${id}/toggle`, { method: 'PATCH' })
-  const task = mockTasks.find((t) => t.id === id);
-  if (!task) {
-    return Promise.reject(new Error(`Task not found: ${id}`));
-  }
-  return Promise.resolve({ ...task, completed: !task.completed });
+export async function getTasks(): Promise<Task[]> {
+  const { tasks } = await getThings();
+  return tasks;
 }

@@ -1,8 +1,8 @@
 import { Skill } from '../types';
-import { mockSkills } from '../data/mockData';
+import { BASE_URL } from './api';
 
-// TODO: Replace with: return fetch(`${BASE_URL}/skills`)
-
-export function getSkills(): Promise<Skill[]> {
-  return Promise.resolve([...mockSkills]);
+export async function getSkills(): Promise<Skill[]> {
+  const res = await fetch(`${BASE_URL}/skills`);
+  if (!res.ok) throw new Error('Failed to fetch skills');
+  return res.json();
 }

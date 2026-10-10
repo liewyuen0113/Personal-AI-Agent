@@ -1,22 +1,24 @@
 import { Permission, ConnectedTool } from '../types';
-import { mockPermissions, mockConnectedTools } from '../data/mockData';
+import { mockConnectedTools } from '../data/mockData';
+import { BASE_URL } from './api';
 
-// TODO: Replace with: return fetch(`${BASE_URL}/permissions`)
-
-export function getPermissions(): Promise<Permission[]> {
-  return Promise.resolve([...mockPermissions]);
+export async function getPermissions(): Promise<Permission[]> {
+  const res = await fetch(`${BASE_URL}/permissions`);
+  if (!res.ok) throw new Error('Failed to fetch permissions');
+  return res.json();
 }
 
-export function togglePermission(id: string): Promise<Permission> {
-  // TODO: Replace with: return fetch(`${BASE_URL}/permissions/${id}/toggle`, { method: 'PATCH' })
-  const permission = mockPermissions.find((p) => p.id === id);
-  if (!permission) {
-    return Promise.reject(new Error(`Permission not found: ${id}`));
-  }
-  return Promise.resolve({ ...permission, enabled: !permission.enabled });
+export async function togglePermission(id: string, enabled: boolean): Promise<Permission> {
+  const res = await fetch(`${BASE_URL}/permissions/${id}`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ enabled }),
+  });
+  if (!res.ok) throw new Error('Failed to update permission');
+  return res.json();
 }
 
-export function getConnectedTools(): Promise<ConnectedTool[]> {
-  // TODO: Replace with: return fetch(`${BASE_URL}/tools`)
-  return Promise.resolve([...mockConnectedTools]);
+// Connected tools not yet in backend — keep mock for now
+export async function getConnectedTools(): Promise<ConnectedTool[]> {
+  return [...mockConnectedTools];
 }

@@ -1,23 +1,23 @@
 import { Memory } from '../types';
-import { mockMemories } from '../data/mockData';
+import { BASE_URL } from './api';
 
-// TODO: Replace with: return fetch(`${BASE_URL}/memory`)
-
-export function getMemories(): Promise<Memory[]> {
-  return Promise.resolve([...mockMemories]);
+export async function getMemories(): Promise<Memory[]> {
+  const res = await fetch(`${BASE_URL}/memory`);
+  if (!res.ok) throw new Error('Failed to fetch memories');
+  return res.json();
 }
 
-export function deleteMemory(id: string): Promise<void> {
-  // TODO: Replace with: return fetch(`${BASE_URL}/memory/${id}`, { method: 'DELETE' })
-  return Promise.resolve();
+export async function deleteMemory(id: string): Promise<void> {
+  const res = await fetch(`${BASE_URL}/memory/${id}`, { method: 'DELETE' });
+  if (!res.ok) throw new Error('Failed to delete memory');
 }
 
-export function updateMemory(id: string, text: string): Promise<Memory> {
-  // TODO: Replace with: return fetch(`${BASE_URL}/memory/${id}`, { method: 'PATCH', body: JSON.stringify({ text }), headers: { 'Content-Type': 'application/json' } })
-  const existing = mockMemories.find((m) => m.id === id);
-  if (!existing) {
-    return Promise.reject(new Error(`Memory not found: ${id}`));
-  }
-  const updated: Memory = { ...existing, text };
-  return Promise.resolve(updated);
+export async function updateMemory(id: string, text: string, category: string): Promise<Memory> {
+  const res = await fetch(`${BASE_URL}/memory/${id}`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ text, category }),
+  });
+  if (!res.ok) throw new Error('Failed to update memory');
+  return res.json();
 }
