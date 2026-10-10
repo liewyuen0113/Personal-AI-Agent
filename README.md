@@ -210,5 +210,5 @@ Built for the **[Nebius × NVIDIA Global AI Hackathon](https://nebiusglobalaihac
 
 | Name | Role |
 |---|---|
-| Yu En | Mobile (React Native + Expo) |
-| TBC | Backend (FastAPI + Nebius + Nemotron) |
+| Liew Yu En | Mobile (React Native + Expo) |
+| Lee Zhi Wei | Backend (FastAPI + Nebius + Nemotron) |
